@@ -22,6 +22,7 @@ const pushDirectoryToIPFS = async path => {
     const response = await ipfs.add(globSource(path, { recursive: true }), addOptions);
     return response;
   } catch (e) {
+    console.log("Error: ", e);
     return {};
   }
 };
@@ -45,7 +46,10 @@ const nodeMayAllowPublish = ipfsClient => {
 
 const deploy = async () => {
   console.log("🛰  Sending to IPFS...");
-  const { cid } = await pushDirectoryToIPFS("./build");
+  const res = await pushDirectoryToIPFS("./build");
+  console.log(res);
+  const { cid } = res;
+
   if (!cid) {
     console.log(`📡 App deployment failed`);
     return false;
